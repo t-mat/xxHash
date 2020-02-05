@@ -130,6 +130,33 @@ static __inline int IS_CONSOLE(FILE* stdStream) {
 #endif
 
 
+#if defined(WIN32) || defined(_WIN32)
+#include "xxhsum_win32_utf8.h" /* UTF-8 compatibility functions */
+
+int main_utf8(int argc, const char** argv);
+#define main        main_utf8
+
+int wmain(int argc, const wchar_t** argv)
+{
+    const int oldStdoutMode = _setmode(_fileno(stdout), _O_U8TEXT);
+    const int oldStderrMode = _setmode(_fileno(stderr), _O_U8TEXT);
+
+    char** utf8_argv = createUtf8Argv(argc, argv);
+    int result = main_utf8(argc, utf8_argv);
+    freeUtf8Argv(argc, utf8_argv);
+
+    fflush(stdout); _setmode(_fileno(stdout), oldStdoutMode);
+    fflush(stderr); _setmode(_fileno(stderr), oldStderrMode);
+    return result;
+}
+
+#define fprintf     fprintf_utf8
+#define printf(...) fprintf_utf8(stdout, __VA_ARGS__)
+#define fopen       fopen_utf8
+
+#endif
+
+
 /* ************************************
 *  Basic Types
 **************************************/
