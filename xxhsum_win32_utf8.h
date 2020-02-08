@@ -15,7 +15,7 @@
 /* Convert UTF-8 string (utf8Str) to UTF-16 string.  Writes UTF-16 string to dst. */
 static int utf8ToUtf16(wchar_t* dst, size_t dstSize, const char* utf8Str)
 {
-    return MultiByteToWideChar(CP_UTF8, 0, utf8Str, -1, dst, dstSize);
+    return MultiByteToWideChar(CP_UTF8, 0, utf8Str, -1, dst, (int)dstSize);
 }
 
 
@@ -29,7 +29,7 @@ static size_t utf16Buflen(const char* utf8Str)
 /* Convert UTF-16 string (utf16Str) to UTF-8 string.  Writes UTF-8 string to dst */
 static int utf16ToUtf8(char* dst, size_t dstSize, const wchar_t* utf16Str)
 {
-    return WideCharToMultiByte(CP_UTF8, 0, utf16Str, -1, dst, dstSize, NULL, NULL);
+    return WideCharToMultiByte(CP_UTF8, 0, utf16Str, -1, dst, (int)dstSize, NULL, NULL);
 }
 
 
