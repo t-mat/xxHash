@@ -6,8 +6,6 @@
 #include <windows.h>    /* MultiByteToWideChar(), WideCharToMultiByte(), CP_UTF8 */
 #include <stdio.h>      /* FILE, _wfopen_s() */
 #include <stdlib.h>     /* malloc(), free() */
-#include <io.h>         /* _setmode() */
-#include <fcntl.h>      /* _O_U8TEXT */
 
 #if !defined(restrict)
 #  define restrict  __restrict
@@ -39,30 +37,6 @@ static int utf16ToUtf8(char* dst, size_t dstSize, const wchar_t* utf16Str)
 static size_t utf8Buflen(const wchar_t* utf16Str)
 {
     return (size_t) utf16ToUtf8(NULL, 0, utf16Str);
-}
-
-
-/* Output UTF-8 format string to stream by fwprintf() */
-static int fprintf_utf8(FILE *stream, const char *format, ...)
-{
-    va_list args;
-    va_start(args, format);
-    int result = _vscprintf(format, args);
-    if (result > 0) {
-        const int nchar = result + 1;
-        char* u8str = (char*) malloc(nchar * sizeof(u8str[0]));
-        result = vsprintf_s(u8str, nchar, format, args);
-        if (result > 0) {
-            const size_t u16BufSize = utf16Buflen(u8str);
-            wchar_t* const u16Buf = (wchar_t*) malloc(u16BufSize * sizeof(u16Buf[0]));
-            utf8ToUtf16(u16Buf, u16BufSize, u8str);
-            result = fwprintf(stream, L"%s", u16Buf);
-            free(u16Buf);
-        }
-        free(u8str);
-    }
-    va_end(args);
-    return result;
 }
 
 
