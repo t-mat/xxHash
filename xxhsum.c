@@ -130,7 +130,9 @@ static __inline int IS_CONSOLE(FILE* stdStream) {
 #endif
 
 
-#if defined(WIN32) || defined(_WIN32)
+/* Only MSVC runtime needs UTF-8<->UTF-16 conversion for Unicode filename.
+ * Since MinGW, etc always uses UTF-8, they don't need any conversion. */
+#if defined(_MSC_VER) && defined(_WIN32)
 #include "xxhsum_win32_utf8.h" /* UTF-8 compatibility functions */
 
 int main_utf8(int argc, const char** argv);
@@ -143,9 +145,8 @@ int wmain(int argc, const wchar_t** argv)
     return result;
 }
 
-#define main        main_utf8
-#define fopen       fopen_utf8
-
+#define main main_utf8
+#define fopen fopen_utf8
 #endif
 
 

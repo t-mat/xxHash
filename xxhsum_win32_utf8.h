@@ -1,7 +1,7 @@
 #ifndef XXHSUM_WIN32_UTF8_H
 #define XXHSUM_WIN32_UTF8_H
 
-#if defined(WIN32) || defined(_WIN32)
+#if defined(_MSC_VER) && defined(_WIN32)
 
 #include <windows.h>    /* MultiByteToWideChar(), WideCharToMultiByte(), CP_UTF8 */
 #include <stdio.h>      /* FILE, _wfopen_s() */
@@ -89,6 +89,6 @@ static void freeUtf8Argv(int argc, char** utf8_argv)
 }
 
 
-#endif/*defined(WIN32) || defined(_WIN32)*/
+#endif
 
-#endif/*XXHSUM_WIN32_UTF8_H*/
+#endif
