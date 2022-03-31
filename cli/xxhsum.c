@@ -108,7 +108,7 @@ static int XSUM_lineNeedsUnescape(const char* line) {
     return *line == '\\';
 }
 
-static int XSUM_printFilename(const char* filename, int needsEscape) {
+static void XSUM_printFilename(const char* filename, int needsEscape) {
     if (!needsEscape) {
         XSUM_output("%s", filename);
     } else {
