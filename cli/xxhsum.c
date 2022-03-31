@@ -876,8 +876,12 @@ static void XSUM_parseFile1(ParseFileArg* XSUM_parseFileArg, int rev)
                 }
 
                 if (b && !XSUM_parseFileArg->statusOnly) {
-                    XSUM_output("%s: %s\n", parsedLine.filename
-                        , lineStatus == LineStatus_hashOk ? "OK" : "FAILED");
+                    const int needsEscape = XSUM_filenameNeedsEscape(parsedLine.filename);
+                    if (needsEscape) {
+                        XSUM_output("%c", '\\');
+                    }
+                    XSUM_printFilename(parsedLine.filename, needsEscape);
+                    XSUM_output(": %s\n", lineStatus == LineStatus_hashOk ? "OK" : "FAILED");
             }   }
             break;
         }
