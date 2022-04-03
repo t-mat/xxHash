@@ -11,5 +11,11 @@ cat filename-escape-xxh64.txt
 ./xxhsum -c filename-escape-xxh64.txt
 hexdump -C filename-escape-xxh64.txt
 
-rm $'filename-escape-foo\nbar'
+./xxhsum --tag $'filename-escape-foo\nbar' | tee filename-escape-xxh64-tag.txt
+cat filename-escape-xxh64-tag.txt
+./xxhsum -c filename-escape-xxh64-tag.txt
+hexdump -C filename-escape-xxh64-tag.txt
+
+rm filename-escape-xxh64-tag.txt
 rm filename-escape-xxh64.txt
+rm $'filename-escape-foo\nbar'
